@@ -28,6 +28,7 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"utest": "mocha --path .mocharc.yml",
+		"utw": "mocha --path .mocharc.yml -w",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
