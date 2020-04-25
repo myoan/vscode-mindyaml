@@ -1,5 +1,3 @@
-import * as yaml from 'js-yaml';
-
 class Node {
     name: string;
     children: Node[];
