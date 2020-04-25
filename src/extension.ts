@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import * as yaml from 'js-yaml';
+import {Model} from './model';
 
 let wpanel: vscode.WebviewPanel;
 let editor: vscode.TextEditor;
@@ -20,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const data = yaml.safeLoad(editor.document.getText());
 			wpanel.webview.postMessage({
 				command: 'mindmap',
-				data: JSON.stringify(data)
+				data: JSON.stringify(new Model(data).export())
 			});
 		},
 		null,
@@ -69,7 +70,7 @@ export function getWebviewContent(js: vscode.Uri) {
 		</style>
 	</head>
 	<body>
-		<p id="debug">hoge</p>
+		<p id="debug"></p>
 		<svg width="800" height="600"></svg>
 		<script src="https://d3js.org/d3.v5.min.js"></script>
 		<script src="${js}"></script>

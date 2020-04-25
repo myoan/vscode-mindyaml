@@ -7,12 +7,15 @@ class Node {
         this.children = [];
     }
 
-    addChild(node: Node) {
-        this.children.push(node);
+    addChildren(nodes: Node[]) {
+        nodes.forEach( node => this.children.push(node) );
     }
 
-    toHash() {
-        return {name: this.name};
+    toHash(): object {
+        if (this.children.length === 0) {
+            return {name: this.name};
+        }
+        return {name: this.name, children: this.children.map(c => c.toHash())};
     }
 }
 
@@ -22,15 +25,22 @@ export class Model {
         this.raw = data;
     }
 
-    convert() {
+    convert(data: object) {
         var result: Node[] = [];
-        if (Array.isArray(this.raw)) {
-            this.raw.forEach(e => {
-                result.push(new Node(e));
+        if (Array.isArray(data)) {
+            data.forEach(e => {
+                if (typeof e === 'string') {
+                    result.push(new Node(e));
+                } else { // object
+                    const key = Object.keys(e)[0];
+                    const node = new Node(key);
+                    node.addChildren(this.convert(e[key]));
+                    result.push(node);
+                }
             });
-            return result.map(n => n.toHash());
+            return result;
         }
-        return result.map(n => n.toHash());
+        return result;
     }
 
     export() {
@@ -38,6 +48,6 @@ export class Model {
             console.log('default');
             return {};
         }
-        return this.convert();
+        return this.convert(this.raw).map(n => n.toHash());
     }
 }

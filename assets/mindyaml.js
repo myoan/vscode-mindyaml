@@ -7,42 +7,17 @@ window.addEventListener('message', event => {
 		case 'mindmap':
 			dbg.textContent = message.data;
 			var data = {
-			    "name": "A",
-			    "children": [
-			      { "name": "B" },
-			      {
-			        "name": "C",
-			        "children": [{ "name": "D" }, { "name": "E" }, { "name": "F" }]
-			      },
-			      { "name": "G" },
-			      {
-			        "name": "H",
-			        "children": [{ "name": "I" }, { "name": "J" }]
-			      },
-			      { "name": "K" }
-			    ]
+			    "name": "Top",
+			    "children": JSON.parse(message.data)
 			};
 			viewMindMap(data);
 			break;
 	}
 });
 
-function viewMindMap(rawData) {
+function viewMindMap(data) {
 	var width = document.querySelector("svg").clientWidth;
 	var height = document.querySelector("svg").clientHeight;
-	var data = {};
-
-	var traverse = function(data) {
-		for (var elem in data) {
-		// if (o[i] !== null && typeof(o[i]) === "object") {
-		//      d = traverse(o[i], fn);
-		//    }
-		}
-	};
-
-	traverse(rawData, function(k,v){
-		return {"name": k};
-	});
 
 	// 3. 描画用のデータ変換
 	root = d3.hierarchy(data);
@@ -53,6 +28,9 @@ function viewMindMap(rawData) {
 	  //  .separation(function(a, b) { return(a.parent == b.parent ? 1 : 2); });
 
 	tree(root);
+
+	// 初期化
+	d3.select("svg > g").remove();
 
 	// 4. svg要素の配置
 	g = d3.select("svg").append("g").attr("transform", "translate(80,0)");

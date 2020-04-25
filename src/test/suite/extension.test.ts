@@ -11,7 +11,23 @@ suite('YAML data suite', () => {
 			},
 			{
 				input: ["hoge"],
-				expect: [{"name": "hoge"}]
+				expect: [{name: "hoge"}]
+			},
+			{
+				input: ["hoge", "fuga"],
+				expect: [{name: "hoge"}, {name: "fuga"}]
+			},
+			{
+				input: ["hoge", {"foo": ["bar"]}],
+				expect: [{name: "hoge"}, {name: "foo", children: [{name: "bar"}]}]
+			},
+			{
+				input: ["hoge", {"foo": ["bar", "piyo"]}],
+				expect: [{name: "hoge"}, {name: "foo", children: [{name: "bar"}, {name: "piyo"}]}]
+			},
+			{
+				input: ["hoge", {"foo": ["bar", "piyo"]}, "fuga"],
+				expect: [{name: "hoge"}, {name: "foo", children: [{name: "bar"}, {name: "piyo"}]}, {name: "fuga"}]
 			}
 		];
 		testCase.forEach(tc => {
