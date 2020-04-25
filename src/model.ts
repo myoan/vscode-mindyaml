@@ -25,7 +25,6 @@ export class Model {
     }
 
     convert() {
-        const sample = yaml.safeLoad('- hoge');
         var result: Node[] = [];
         if (Array.isArray(this.raw)) {
             this.raw.forEach(e => {
